@@ -22,11 +22,13 @@ class CustomDataset(Dataset):
 
 
 # Specify the path to your HDF5 file
-data_file = 'data/torch/train_dataset_upscaled.h5'
+data_file = 'data/torch/test_submission.h5'
+
+batch_size = 5
 
 # Create a DataLoader
 dataset = CustomDataset(data_file)
-dataloader = DataLoader(dataset, batch_size=4, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
 # You can now use 'dataloader' to iterate through your data in batches
 for i, data in enumerate(dataloader):

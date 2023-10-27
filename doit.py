@@ -17,19 +17,24 @@ class DenoisingCNN(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(2, stride=2),
             #            nn.Upsample(scale_factor=2),
-            nn.Conv2d(4, 8, 3, padding=1),
+            nn.Conv2d(4, 8, 4, padding=1),
             nn.ReLU(),
             #            nn.Upsample(scale_factor=2),
             nn.MaxPool2d(2, stride=2),
             nn.Conv2d(8, 16, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(16, 64, 4, padding=1),
+            nn.Conv2d(16, 64, 3, padding=1),
             nn.ReLU(),
-            nn.MaxPool2d(2, stride=2)
+            nn.MaxPool2d(2, stride=2),
+            nn.Conv2d(64, 128, 3, padding=1),
+            nn.ReLU(),
             #            nn.Upsample(scale_factor=2),
         )
         self.decoder = nn.Sequential(
             #            nn.MaxPool2d(2, stride=2),
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(128, 64, 3, padding=1),
+            nn.ReLU(),
             nn.Upsample(scale_factor=2),
             nn.Conv2d(64, 16, 2, padding=1),
             nn.ReLU(),
@@ -55,7 +60,7 @@ class DenoisingCNN(nn.Module):
 model = torch.load("model.pth", map_location=torch.device('cpu'))
 model.eval()
 
-test_dataloader = load_test_data(batch_size=5, upscaled=True, shuffle=False)
+test_dataloader = load_test_data(batch_size=5, upscaled=False, shuffle=False)
 
 predictions = []
 for i, data in enumerate(test_dataloader, 0):
